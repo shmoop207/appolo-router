@@ -1,0 +1,47 @@
+{
+  "name": "rocketroute",
+  "description": "fast routing",
+  "keywords": [
+    "route",
+    "fast",
+    "rocket"
+  ],
+  "author": {
+    "name": "Roman Svichar",
+    "email": "shmoop207@gmail.com"
+  },
+  "engines": {
+    "node": ">= 8.4.x",
+    "npm": ">= 5.3.x"
+  },
+  "main": "./index.js",
+  "version": "1.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmoop207/rocket-route.git"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "path-to-regexp": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.3.0",
+    "@types/benchmark": "^1.0.30",
+    "@types/chai": "^4.0.4",
+    "@types/lodash": "^4.14.93",
+    "@types/mocha": "^2.2.43",
+    "@types/path-to-regexp": "^1.7.0",
+    "benchmark": "^2.1.4",
+    "chai": "^3.5.0",
+    "express": "^4.16.2",
+    "find-my-way": "^1.9.0",
+    "grunt": "1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-mocha-test": "0.13.2",
+    "mocha": "^3.2.0",
+    "typescript": "^2.5.2"
+  }
+}
