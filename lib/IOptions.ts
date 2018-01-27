@@ -1,3 +1,4 @@
 export interface IOptions{
-    maxSize?: number,
+    maxCacheSize?: number,
+    useCache?: boolean,
 }

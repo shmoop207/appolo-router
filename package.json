@@ -15,7 +15,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -25,7 +25,8 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "lodash": "^4.17.4",
-    "path-to-regexp": "^2.1.0"
+    "path-to-regexp": "^2.1.0",
+    "rocket-lru": "^1.0.1"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",

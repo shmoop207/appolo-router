@@ -3,21 +3,37 @@ import {Methods} from "./enums";
 import {Tree} from "./tree";
 import {Util} from "./util";
 import {Params} from "./leaf";
+import {Cache} from "rocket-lru";
+import _= require( "lodash");
 
 
 export class Router {
 
+
     private _forest: { [index: string]: Tree } = {};
 
     private _staticRoutes: { [index: string]: { [index: string]: any } } = {};
+    private _cachedRoutes: { [index: string]: Cache<string, { params: Params, handler: any }> } = {};
+    private _options: IOptions;
+    private _useCache:boolean;
 
     public constructor(options?: IOptions) {
+
+        this._options = _.extend({
+            useCache: true,
+            maxCacheSize: 1000
+        }, options || {});
+
+        this._useCache = this._options.useCache;
 
         Object.keys(Methods)
             .forEach(method => this._forest[method] = new Tree(method as Methods));
 
         Object.keys(Methods)
             .forEach(method => this._staticRoutes[method] = {});
+
+        Object.keys(Methods)
+            .forEach(method => this._cachedRoutes[method] = new Cache<string, { params: Params, handler: any }>({maxSize:this._options.maxCacheSize}));
     }
 
     public get(path: string, handler: any): this {
@@ -44,30 +60,40 @@ export class Router {
         return this.add(Methods.HEAD, path, handler);
     }
 
-    public add(method: keyof typeof Methods, path: string, handler: any): this {
+    public add(method: keyof typeof Methods | (keyof typeof Methods)[], path: string, handler: any): this {
 
         path = Util.removeHeadSlash(path);
 
+        this._add(method,path,handler);
+
+        return this;
+
+    }
+
+    private _add(method: keyof typeof Methods | (keyof typeof Methods)[], path: string, handler: any):this{
         path = Util.removeTailSlash(path);
 
         let parts = path.split("/");
 
-        let tree = this._forest[method];
+        let methods = _.isArray(method) ? method : [method];
 
-        let leaf = tree.add(parts);
+        _.forEach(methods, method => {
+            let tree = this._forest[method];
 
-        leaf.handler = handler;
+            let leaf = tree.add(parts);
 
-        if (Util.isStaticRoute(path)) {
-            this._staticRoutes[method]["/" + path] = handler;
-        }
+            leaf.handler = handler;
+
+            if (Util.isStaticRoute(path)) {
+                this._staticRoutes[method]["/" + path] = handler;
+                this._staticRoutes[method]["/" + path+"/"] = handler;
+            }
+        });
 
         return this
     }
 
     public find(method: keyof typeof Methods, path: string): { params: Params, handler: any } {
-
-        path = Util.removeTailSlash(path);
 
         let staticRote = this._staticRoutes[method][path];
 
@@ -75,8 +101,20 @@ export class Router {
             return {handler: staticRote, params: {}}
         }
 
+        if( this._useCache){
+            let cached = this._cachedRoutes[method].get(path);
+
+            if (cached) {
+                return {handler: cached.handler, params: cached.params}
+            }
+        }
+
         let parts = path.split("/");
 
+        //remove "/"
+        if (parts[parts.length - 1] == "") {
+            parts.pop();
+        }
 
         let tree = this._forest[method];
 
@@ -88,7 +126,11 @@ export class Router {
             return null;
         }
 
-        return {params, handler: found.handler};
+        let dto = {params, handler: found.handler};
+
+        this._cachedRoutes[method].set(path, dto);
+
+        return dto;
     }
 
 }

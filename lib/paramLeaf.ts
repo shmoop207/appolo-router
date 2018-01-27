@@ -3,7 +3,7 @@ import {Leaf, Params} from "./leaf";
 
 export class ParamLeaf extends Leaf {
 
-    private _paramName:string;
+    private _paramName: string;
 
     constructor(part: string) {
         super(part);
@@ -21,12 +21,13 @@ export class ParamLeaf extends Leaf {
 
         let part = parts[index];
 
+
         if (this._handler && index == parts.length - 1) {
             params[this._paramName] = part;
             return this;
         }
 
-        let found =  this._checkLeafs(parts, index, params);
+        let found = this._checkLeafs(parts, index, params);
 
         if (found) {
             params[this._paramName] = part;

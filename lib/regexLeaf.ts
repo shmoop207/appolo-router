@@ -35,6 +35,10 @@ export class RegexLeaf extends Leaf {
 
         let part = parts[index];
 
+        if(part ==""){
+            return null;
+        }
+
         if(this._leafs.length == 0 && this._handler){
             return this._checkFullPath(index,parts,params)
         }
