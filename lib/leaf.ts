@@ -2,6 +2,7 @@ import {LeafType} from "./enums";
 import {Util} from "./util";
 import _= require( "lodash");
 import {LeafFactory} from "./leafFactory";
+import {IOptions} from "./IOptions";
 
 export interface Params {
     [index: string]: string
@@ -10,18 +11,19 @@ export interface Params {
 
 export abstract class Leaf {
 
-
     protected _leafs: Leaf[];
     protected _numLeafs: number;
     protected _handler: any;
     protected _part: string;
+    protected _options: IOptions;
 
     public abstract readonly Type:LeafType;
 
-    constructor( part: string) {
+    constructor( part: string,options) {
         this._leafs = [];
         this._numLeafs = 0;
         this._part = part;
+        this._options = options
     }
 
 
@@ -39,7 +41,7 @@ export abstract class Leaf {
         let leaf: Leaf = this.leafs.find(leaf => leaf.part == part);
 
         if (!leaf) {
-            leaf = require("./leafFactory").LeafFactory.createLeaf(part,parts,index);
+            leaf = require("./leafFactory").LeafFactory.createLeaf(part,parts,index,this._options);
             this._leafs.push(leaf);
             this._leafs = _.orderBy(this._leafs, (item: Leaf) => item.Type);
             this._numLeafs = this._leafs.length;

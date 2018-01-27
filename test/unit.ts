@@ -66,6 +66,23 @@ describe("Router", () => {
 
     });
 
+    it("Should find param route decoded", () => {
+        let router = new Router({decodeUrlParams:true});
+        router.get("/test/:test2/", {working3: true});
+        router.get("/test/aaa/:test2-:test3/", {working4: true});
+
+        let output = router.find("GET" as Methods, `/test/${encodeURIComponent("http://www.cnn.com")}/`);
+
+        output.handler.working3.should.be.ok;
+        output.params.test2.should.be.eq("http://www.cnn.com");
+
+        output = router.find("GET" as Methods, `/test/aaa/${encodeURIComponent("http://www.cnn.com")}-bbb/`);
+
+        output.handler.working4.should.be.ok;
+        output.params.test2.should.be.eq("http://www.cnn.com");
+        output.params.test3.should.be.eq("bbb");
+    })
+
     it("Should find regex route ", () => {
 
         let router = new Router();
@@ -162,12 +179,20 @@ describe("Router", () => {
 
     });
 
-    it("Should find route with an extension regex", () => {
+    it("Should not find route with an extension regex", () => {
 
         let router = new Router();
 
         router.get('/test/:file(^\\d+).png', {name: 1});
-        router.find("GET", "/test/12.png").params.file.should.be.eq("12.png");
+        router.get('/test/at/:hour(\\d{2})h:minute(\\d{2})m', {name: 2});
+
+        router.find("GET", "/test/12.png").params.file.should.be.eq("12");
+
+        let output = router.find("GET", "/test/at/13h15m");
+
+        output.params.hour.should.be.eq("13");
+        output.params.minute.should.be.eq("15");
+
         should.not.exist(router.find("GET", "/test/aa.png"));
 
     });

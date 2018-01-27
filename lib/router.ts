@@ -15,25 +15,31 @@ export class Router {
     private _staticRoutes: { [index: string]: { [index: string]: any } } = {};
     private _cachedRoutes: { [index: string]: Cache<string, { params: Params, handler: any }> } = {};
     private _options: IOptions;
-    private _useCache:boolean;
+    private _useCache: boolean;
 
     public constructor(options?: IOptions) {
 
         this._options = _.extend({
             useCache: true,
+            decodeUrlParams: false,
             maxCacheSize: 1000
         }, options || {});
 
         this._useCache = this._options.useCache;
 
+        this.reset();
+    }
+
+    public reset() {
         Object.keys(Methods)
-            .forEach(method => this._forest[method] = new Tree(method as Methods));
+            .forEach(method => this._forest[method] = new Tree(this._options));
 
         Object.keys(Methods)
             .forEach(method => this._staticRoutes[method] = {});
 
         Object.keys(Methods)
-            .forEach(method => this._cachedRoutes[method] = new Cache<string, { params: Params, handler: any }>({maxSize:this._options.maxCacheSize}));
+            .forEach(method => this._cachedRoutes[method] = new Cache<string, { params: Params, handler: any }>({maxSize: this._options.maxCacheSize}));
+
     }
 
     public get(path: string, handler: any): this {
@@ -64,13 +70,13 @@ export class Router {
 
         path = Util.removeHeadSlash(path);
 
-        this._add(method,path,handler);
+        this._add(method, path, handler);
 
         return this;
 
     }
 
-    private _add(method: keyof typeof Methods | (keyof typeof Methods)[], path: string, handler: any):this{
+    private _add(method: keyof typeof Methods | (keyof typeof Methods)[], path: string, handler: any): this {
         path = Util.removeTailSlash(path);
 
         let parts = path.split("/");
@@ -86,7 +92,7 @@ export class Router {
 
             if (Util.isStaticRoute(path)) {
                 this._staticRoutes[method]["/" + path] = handler;
-                this._staticRoutes[method]["/" + path+"/"] = handler;
+                this._staticRoutes[method]["/" + path + "/"] = handler;
             }
         });
 
@@ -101,7 +107,7 @@ export class Router {
             return {handler: staticRote, params: {}}
         }
 
-        if( this._useCache){
+        if (this._useCache) {
             let cached = this._cachedRoutes[method].get(path);
 
             if (cached) {

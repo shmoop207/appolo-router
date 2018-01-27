@@ -43,6 +43,18 @@ describe("Router", () => {
         output.params.test2.should.be.eq("test2");
         output.params.test3.should.be.eq("test3");
     });
+    it("Should find param route decoded", () => {
+        let router = new index_1.Router({ decodeUrlParams: true });
+        router.get("/test/:test2/", { working3: true });
+        router.get("/test/aaa/:test2-:test3/", { working4: true });
+        let output = router.find("GET", `/test/${encodeURIComponent("http://www.cnn.com")}/`);
+        output.handler.working3.should.be.ok;
+        output.params.test2.should.be.eq("http://www.cnn.com");
+        output = router.find("GET", `/test/aaa/${encodeURIComponent("http://www.cnn.com")}-bbb/`);
+        output.handler.working4.should.be.ok;
+        output.params.test2.should.be.eq("http://www.cnn.com");
+        output.params.test3.should.be.eq("bbb");
+    });
     it("Should find regex route ", () => {
         let router = new index_1.Router();
         router.get("/test/:foo(\\d+)/", { working1: true });
@@ -101,10 +113,14 @@ describe("Router", () => {
         router.get('/a/:param/b', { name: 1 });
         router.find("GET", "/a/foo-bar/b").params.param.should.be.eq("foo-bar");
     });
-    it("Should find route with an extension regex", () => {
+    it("Should not find route with an extension regex", () => {
         let router = new index_1.Router();
         router.get('/test/:file(^\\d+).png', { name: 1 });
-        router.find("GET", "/test/12.png").params.file.should.be.eq("12.png");
+        router.get('/test/at/:hour(\\d{2})h:minute(\\d{2})m', { name: 2 });
+        router.find("GET", "/test/12.png").params.file.should.be.eq("12");
+        let output = router.find("GET", "/test/at/13h15m");
+        output.params.hour.should.be.eq("13");
+        output.params.minute.should.be.eq("15");
         should.not.exist(router.find("GET", "/test/aa.png"));
     });
     it("Should find route with mixed nested route with double matching regex", () => {

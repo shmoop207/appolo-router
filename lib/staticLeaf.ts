@@ -1,13 +1,14 @@
 import {LeafType, Methods} from "./enums";
 import {Leaf, Params} from "./leaf";
+import {IOptions} from "./IOptions";
 
 export class StaticLeaf extends Leaf {
 
     public readonly Type:LeafType = LeafType.Static;
 
 
-    constructor(part: string) {
-        super(part);
+    constructor(part: string,options:IOptions) {
+        super(part,options);
     }
 
 

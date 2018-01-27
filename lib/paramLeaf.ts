@@ -1,12 +1,13 @@
 import {LeafType, Methods} from "./enums";
 import {Leaf, Params} from "./leaf";
+import {IOptions} from "./IOptions";
 
 export class ParamLeaf extends Leaf {
 
     private _paramName: string;
 
-    constructor(part: string) {
-        super(part);
+    constructor(part: string,options:IOptions) {
+        super(part,options);
 
         this._paramName = this._part.substr(1);
     }
@@ -23,7 +24,7 @@ export class ParamLeaf extends Leaf {
 
 
         if (this._handler && index == parts.length - 1) {
-            params[this._paramName] = part;
+            params[this._paramName] = this._options.decodeUrlParams ? decodeURIComponent(part):part;
             return this;
         }
 

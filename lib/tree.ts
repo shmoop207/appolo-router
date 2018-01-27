@@ -1,10 +1,11 @@
 import {LeafType, Methods} from "./enums";
 import {Leaf, Params} from "./leaf";
+import {IOptions} from "./IOptions";
 
 export class Tree extends Leaf {
 
-    constructor(private _method: Methods) {
-        super("");
+    constructor(options:IOptions) {
+        super("",options);
     }
 
     public readonly Type = LeafType.Tree;

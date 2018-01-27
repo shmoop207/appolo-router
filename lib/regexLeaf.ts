@@ -2,6 +2,7 @@ import {LeafType, Methods} from "./enums";
 import {Leaf, Params} from "./leaf";
 import {Util} from "./util";
 import pathToRegexp = require('path-to-regexp')
+import {IOptions} from "./IOptions";
 
 export class RegexLeaf extends Leaf {
 
@@ -12,8 +13,8 @@ export class RegexLeaf extends Leaf {
 
     public readonly Type = LeafType.Regex;
 
-    constructor(part: string,parts:string[],index:number) {
-        super(part);
+    constructor(part: string,parts:string[],index:number,options:IOptions) {
+        super(part,options);
 
         let keys = [], keyFull = [];
 
@@ -77,8 +78,9 @@ export class RegexLeaf extends Leaf {
 
     private _addParams(params: Params, keys: string[], values: string[]) {
 
+        let decode = this._options.decodeUrlParams;
         for (let i = 0, len = keys.length; i < len; i++) {
-            params[keys[i]] = values[i]
+            params[keys[i]] = decode ? decodeURIComponent(values[i+1]) :values[i+1]
         }
     }
 
