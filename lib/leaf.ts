@@ -17,9 +17,9 @@ export abstract class Leaf {
     protected _part: string;
     protected _options: IOptions;
 
-    public abstract readonly Type:LeafType;
+    public abstract readonly Type: LeafType;
 
-    constructor( part: string,options) {
+    constructor(part: string, options) {
         this._leafs = [];
         this._numLeafs = 0;
         this._part = part;
@@ -31,7 +31,22 @@ export abstract class Leaf {
         return this._part
     }
 
-    public add(parts: string[], index: number = 0):Leaf {
+    public remove(parts: string[], index: number = 0) {
+        if (this._part == parts[index]) {
+            if (index == parts.length - 1 && this._handler) {
+                this._handler = null;
+                return;
+            }
+
+            for (let j = 0; j < this._numLeafs; j++) {
+
+                this._leafs[j].remove(parts, index + 1);
+            }
+
+        }
+    }
+
+    public add(parts: string[], index: number = 0): Leaf {
         if (parts.length == index) {
             return this;
         }
@@ -41,7 +56,7 @@ export abstract class Leaf {
         let leaf: Leaf = this.leafs.find(leaf => leaf.part == part);
 
         if (!leaf) {
-            leaf = require("./leafFactory").LeafFactory.createLeaf(part,parts,index,this._options);
+            leaf = require("./leafFactory").LeafFactory.createLeaf(part, parts, index, this._options);
             this._leafs.push(leaf);
             this._leafs = _.orderBy(this._leafs, (item: Leaf) => item.Type);
             this._numLeafs = this._leafs.length;
@@ -59,7 +74,7 @@ export abstract class Leaf {
         return this._handler
     }
 
-    public abstract check(parts: string[], index: number, params: Params):Leaf
+    public abstract check(parts: string[], index: number, params: Params): Leaf
 
 
     protected _checkLeafs(parts: string[], index: number, params: Params): Leaf {

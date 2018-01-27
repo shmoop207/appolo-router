@@ -43,6 +43,37 @@ describe("Router", () => {
         output.params.test2.should.be.eq("test2");
         output.params.test3.should.be.eq("test3");
     });
+    it("Should remove  route ", () => {
+        let router = new index_1.Router({ useCache: false });
+        router.get("/:test/", { working1: true });
+        router.get("/test/test2/:test3/", { working2: true });
+        router.get("/test/:test2/", { working3: true });
+        router.get("/test/:test2/:test3/test4/", { working4: true });
+        let output = router.find("GET", "/test/");
+        output.handler.working1.should.be.ok;
+        output.params.test.should.be.eq("test");
+        output = router.find("GET", "/test/test2/test3/");
+        output.handler.working2.should.be.ok;
+        output.params.test3.should.be.eq("test3");
+        output = router.find("GET", "/test/test2/");
+        output.handler.working3.should.be.ok;
+        output.params.test2.should.be.eq("test2");
+        output = router.find("GET", "/test/test2/test3/test4/");
+        output.handler.working4.should.be.ok;
+        output.params.test2.should.be.eq("test2");
+        output.params.test3.should.be.eq("test3");
+        router.remove("GET", "/:test/");
+        router.remove("GET", "/test/:test2/");
+        should.not.exist(router.find("GET", "/test/"));
+        output = router.find("GET", "/test/test2/test3/");
+        output.handler.working2.should.be.ok;
+        output.params.test3.should.be.eq("test3");
+        should.not.exist(router.find("GET", "/test/test2/"));
+        output = router.find("GET", "/test/test2/test3/test4/");
+        output.handler.working4.should.be.ok;
+        output.params.test2.should.be.eq("test2");
+        output.params.test3.should.be.eq("test3");
+    });
     it("Should find param route decoded", () => {
         let router = new index_1.Router({ decodeUrlParams: true });
         router.get("/test/:test2/", { working3: true });

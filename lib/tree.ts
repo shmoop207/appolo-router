@@ -17,4 +17,11 @@ export class Tree extends Leaf {
         return this._checkLeafs(parts, index, params)
     }
 
+    public remove(parts: string[], index: number = 0){
+        for (let j = 0; j < this._numLeafs; j++) {
+
+            this._leafs[j].remove(parts, index);
+        }
+    }
+
 }

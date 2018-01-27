@@ -73,7 +73,6 @@ export class Router {
         this._add(method, path, handler);
 
         return this;
-
     }
 
     private _add(method: keyof typeof Methods | (keyof typeof Methods)[], path: string, handler: any): this {
@@ -91,12 +90,36 @@ export class Router {
             leaf.handler = handler;
 
             if (Util.isStaticRoute(path)) {
-                this._staticRoutes[method]["/" + path] = handler;
-                this._staticRoutes[method]["/" + path + "/"] = handler;
+                this._staticRoutes[method][`/${path}`] = handler;
+                this._staticRoutes[method][`/${path}/`] = handler;
             }
         });
 
         return this
+    }
+
+    public remove(method: keyof typeof Methods | (keyof typeof Methods)[], path: string) {
+        path = Util.removeTailSlash(path);
+        path = Util.removeHeadSlash(path);
+
+        let methods = _.isArray(method) ? method : [method];
+
+        let parts = path.split("/");
+
+        _.forEach(methods, method => {
+
+            let tree = this._forest[method];
+
+            tree.remove(parts,0);
+
+            if (Util.isStaticRoute(path)) {
+                delete this._staticRoutes[method][`/${path}`];
+                delete this._staticRoutes[method][`/${path}/`];
+            }
+
+            this._cachedRoutes[method].del(`/${path}`);
+            this._cachedRoutes[method].del(`/${path}/`);
+        });
     }
 
     public find(method: keyof typeof Methods, path: string): { params: Params, handler: any } {
