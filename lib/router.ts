@@ -3,7 +3,7 @@ import {Methods} from "./enums";
 import {Tree} from "./tree";
 import {Util} from "./util";
 import {Params} from "./leaf";
-import {Cache} from "rocket-lru";
+import {Cache} from "appolo-cache";
 import _= require( "lodash");
 
 
