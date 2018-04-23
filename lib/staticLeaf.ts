@@ -14,9 +14,6 @@ export class StaticLeaf extends Leaf {
 
     public check(parts: string[], index: number, params: Params): Leaf {
 
-        if (index == parts.length) {
-            return this._handler ? this:null;
-        }
 
         let part = parts[index];
 

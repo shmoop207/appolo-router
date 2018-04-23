@@ -1,4 +1,4 @@
-import chai = require("chai")
+import chai = require("chai");
 import {Router} from "../index"
 import {Methods} from "../lib/enums";
 
@@ -6,6 +6,30 @@ let should = chai.should();
 
 
 describe("Router", () => {
+
+
+    it("Should find static route with empty route", () => {
+        let router = new Router();
+        router.get("/test", {working1: true});
+
+        let output = router.find("GET" as Methods, "/");
+        should.not.exist(output)
+
+        router = new Router();
+        router.get("/:test", {working1: true});
+
+        output = router.find("GET" as Methods, "/");
+        should.not.exist(output)
+
+        router = new Router();
+        router.get("/(.*)22", {working1: true});
+
+        output = router.find("GET" as Methods, "/");
+        should.not.exist(output)
+
+
+    })
+
     it("Should find static route ", () => {
         let router = new Router();
 
@@ -67,22 +91,22 @@ describe("Router", () => {
     });
 
     it("Should remove  route ", () => {
-        let router = new Router({useCache:false});
+        let router = new Router({useCache: false});
 
         router.get("/:test/", {working1: true});
         router.get("/test/test2/:test3/", {working2: true});
         router.get("/test/:test2/", {working3: true});
         router.get("/test/:test2/:test3/test4/", {working4: true});
 
-        let output = router.find("GET" , "/test/");
+        let output = router.find("GET", "/test/");
         output.handler.working1.should.be.ok;
         output.params.test.should.be.eq("test");
 
-        output = router.find("GET" , "/test/test2/test3/");
+        output = router.find("GET", "/test/test2/test3/");
         output.handler.working2.should.be.ok;
         output.params.test3.should.be.eq("test3");
 
-        output = router.find("GET" , "/test/test2/");
+        output = router.find("GET", "/test/test2/");
         output.handler.working3.should.be.ok;
         output.params.test2.should.be.eq("test2");
 
@@ -91,8 +115,8 @@ describe("Router", () => {
         output.params.test2.should.be.eq("test2");
         output.params.test3.should.be.eq("test3");
 
-        router.remove("GET","/:test/");
-        router.remove("GET","/test/:test2/");
+        router.remove("GET", "/:test/");
+        router.remove("GET", "/test/:test2/");
 
         should.not.exist(router.find("GET", "/test/"));
 
@@ -102,7 +126,7 @@ describe("Router", () => {
         output.params.test3.should.be.eq("test3");
 
 
-       should.not.exist(router.find("GET" , "/test/test2/"));
+        should.not.exist(router.find("GET", "/test/test2/"));
 
         output = router.find("GET" as Methods, "/test/test2/test3/test4/");
         output.handler.working4.should.be.ok;
@@ -112,7 +136,7 @@ describe("Router", () => {
     });
 
     it("Should find param route decoded", () => {
-        let router = new Router({decodeUrlParams:true});
+        let router = new Router({decodeUrlParams: true});
         router.get("/test/:test2/", {working3: true});
         router.get("/test/aaa/:test2-:test3/", {working4: true});
 

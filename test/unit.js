@@ -4,6 +4,20 @@ const chai = require("chai");
 const index_1 = require("../index");
 let should = chai.should();
 describe("Router", () => {
+    it("Should find static route with empty route", () => {
+        let router = new index_1.Router();
+        router.get("/test", { working1: true });
+        let output = router.find("GET", "/");
+        should.not.exist(output);
+        router = new index_1.Router();
+        router.get("/:test", { working1: true });
+        output = router.find("GET", "/");
+        should.not.exist(output);
+        router = new index_1.Router();
+        router.get("/(.*)22", { working1: true });
+        output = router.find("GET", "/");
+        should.not.exist(output);
+    });
     it("Should find static route ", () => {
         let router = new index_1.Router();
         router.get("/test/", { working1: true });
