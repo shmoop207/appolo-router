@@ -3,8 +3,9 @@
   "description": "fast routing",
   "keywords": [
     "route",
+    "router",
     "fast",
-    "rocket"
+    "appolo"
   ],
   "author": {
     "name": "Roman Svichar",
@@ -15,7 +16,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "1.0.4",
+  "version": "6.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,7 +27,7 @@
   "dependencies": {
     "lodash": "^4.17.5",
     "path-to-regexp": "^2.2.0",
-    "appolo-cache": "github:shmoop207/appolo-cache"
+    "appolo-cache": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^9.6.2",
