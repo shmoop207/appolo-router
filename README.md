@@ -66,7 +66,7 @@ if no `params` found return empty object
 import {Router} from "appolo-route"
 
 let router = new Router()
-    .get("/users/:userId", (userId)=>"console.log(userId)");
+    .get("/users/:userId", (userId)=>console.log(userId));
 
     result = router.find("GET" , "/users/123");
 
@@ -97,7 +97,7 @@ multi methods supported
 ```javascript
 
 let router = new Router()
-    .add(["Post,"Get"],"/test/:param", ()=>"working");
+    .add(["Post","Get"],"/test/:param", ()=>"working");
 ```
 
 #### remove(method:Http.Methods | Http.Methods[], path: string): Router
@@ -106,7 +106,7 @@ multi methods supported
 ```javascript
 
 let router = new Router()
-    .add(["Post,"Get"],"/test/:param", ()=>"working")
+    .add(["Post","Get"],"/test/:param", ()=>"working")
     .remove("Get","/test/:param");
 ```
 
