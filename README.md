@@ -97,7 +97,7 @@ multi methods supported
 ```javascript
 
 let router = new Router()
-    .add(["Post","Get"],"/test/:param", ()=>"working");
+    .add(["POST","GET"],"/test/:param", ()=>"working");
 ```
 
 #### remove(method:Http.Methods | Http.Methods[], path: string): Router
@@ -106,7 +106,7 @@ multi methods supported
 ```javascript
 
 let router = new Router()
-    .add(["Post","Get"],"/test/:param", ()=>"working")
+    .add(["POST","GET"],"/test/:param", ()=>"working")
     .remove("Get","/test/:param");
 ```
 
