@@ -106,7 +106,7 @@ multi methods supported
 ```javascript
 
 let router = new Router()
-    .add(["Post,"Get"],"/test/:param", ()=>"working");
+    .add(["Post,"Get"],"/test/:param", ()=>"working")
     .remove("Get","/test/:param");
 ```
 
