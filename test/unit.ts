@@ -18,7 +18,7 @@ describe("Router", () => {
         router = new Router();
         router.get("/:test", {working1: true});
 
-        output = router.find("GET" as Methods, "/");
+        output = router.find("GET" , "/");
         should.not.exist(output)
 
         router = new Router();
