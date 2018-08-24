@@ -1,4 +1,7 @@
 # Appolo Route
+[![Build Status](https://travis-ci.org/shmoop207/appolo-route.svg?branch=master)](https://travis-ci.org/shmoop207/appolo-route) [![Dependencies status](https://david-dm.org/shmoop207/appolo-route.svg)](https://david-dm.org/shmoop207/appolo-route) [![NPM version](https://badge.fury.io/js/appolo-route.svg)](https://badge.fury.io/js/appolo-route)  [![npm Downloads](https://img.shields.io/npm/dm/appolo-route.svg?style=flat)](https://www.npmjs.com/package/appolo-route)
+[![Known Vulnerabilities](https://snyk.io/test/github/shmoop207/appolo-route/badge.svg)](https://snyk.io/test/github/shmoop207/appolo-route)
+
 Fast and simple http routing using radix tree
 
 ## Installation:
