@@ -7,6 +7,7 @@ export enum Methods{
     "DELETE" = "DELETE",
     "HEAD" = "HEAD",
     "OPTIONS" = "OPTIONS",
+    "PURGE" = "PURGE",
 }
 
 export enum LeafType{
