@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const benchmark = require("benchmark");
-const _1 = require("../");
+const __1 = require("../");
 const findMyWay = require("find-my-way");
 const express = require("express/lib/router");
 let findMyWayRouter = findMyWay();
@@ -19,9 +19,10 @@ const routes = [
     { method: 'GET', url: '/map/:location/events' },
     { method: 'GET', url: '/status' },
     { method: 'GET', url: '/very/deeply/nested/route/hello/there' },
-    { method: 'GET', url: '/static/*' }
+    { method: 'GET', url: '/static/*' },
+    { method: 'GET', url: '/test/:foo(\\d+)/' }
 ];
-let router = new _1.Router({ useCache: false });
+let router = new __1.Router({ useCache: false });
 routes.forEach(route => {
     router.add(route.method, route.url, () => {
     });
@@ -107,6 +108,17 @@ suite.add('express: wildcard', function () {
 });
 suite.add('router: wildcard', function () {
     router.find("GET", "/static/index.html");
+});
+//***************/
+suite.add('fastify: regex', function () {
+    findMyWayRouter.find("GET", "/test/123/");
+});
+suite.add('express: regex', function () {
+    expressRouter.handle({ method: 'GET', url: '/test/123/' }, null, () => {
+    });
+});
+suite.add('router: regex', function () {
+    router.find("GET", "/test/123/");
 });
 //***************/
 suite

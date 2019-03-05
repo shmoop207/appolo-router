@@ -24,7 +24,8 @@ const routes = [
     {method: 'GET', url: '/map/:location/events'},
     {method: 'GET', url: '/status'},
     {method: 'GET', url: '/very/deeply/nested/route/hello/there'},
-    {method: 'GET', url: '/static/*'}
+    {method: 'GET', url: '/static/*'},
+    {method: 'GET', url: '/test/:foo(\\d+)/'}
 ];
 
 
@@ -36,7 +37,7 @@ routes.forEach(route => {
 });
 
 routes.forEach(route => {
-    findMyWayRouter.on(route.method, route.url, () => {
+    findMyWayRouter.on(route.method as any, route.url, () => {
     })
 });
 
@@ -141,6 +142,19 @@ suite.add('router: wildcard', function () {
 });
 //***************/
 
+suite.add('fastify: regex', function () {
+    findMyWayRouter.find("GET", "/test/123/")
+});
+
+suite.add('express: regex', function () {
+    expressRouter.handle({method: 'GET', url: '/test/123/'}, null, () => {
+    })
+});
+
+suite.add('router: regex', function () {
+    router.find("GET", "/test/123/")
+});
+//***************/
 
 suite
     .on('cycle', (event) => {

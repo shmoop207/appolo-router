@@ -1,8 +1,8 @@
-import {LeafType, Methods} from "./enums";
+import {LeafType} from "./enums";
 import {Leaf, Params} from "./leaf";
 import {Util} from "./util";
-import pathToRegexp = require('path-to-regexp')
 import {IOptions} from "./IOptions";
+import pathToRegexp = require('path-to-regexp');
 
 export class RegexLeaf extends Leaf {
 
@@ -10,11 +10,12 @@ export class RegexLeaf extends Leaf {
     private _regexFull: RegExp;
     private _paramNames: string[];
     private _paramNamesFull: string[];
+    private _isAny: boolean;
 
     public readonly Type = LeafType.Regex;
 
-    constructor(part: string,parts:string[],index:number,options:IOptions) {
-        super(part,options);
+    constructor(part: string, parts: string[], index: number, options: IOptions) {
+        super(part, options);
 
         let keys = [], keyFull = [];
 
@@ -25,7 +26,10 @@ export class RegexLeaf extends Leaf {
         this._regexFull = pathToRegexp(fullPath, keyFull);
 
         this._paramNames = keys.map(item => item.name);
-        this._paramNamesFull = keyFull.map(item => item.name);    }
+        this._paramNamesFull = keyFull.map(item => item.name);
+
+        this._isAny = part == "*";
+    }
 
 
     public check(parts: string[], index: number, params: Params): Leaf {
@@ -37,11 +41,11 @@ export class RegexLeaf extends Leaf {
         let part = parts[index];
 
 
-        if(this._leafs.length == 0 && this._handler){
-            return this._checkFullPath(index,parts,params)
-        }
+        // if(this._leafs.length == 0 && this._handler){
+        //     return this._checkFullPath(index,parts,params)
+        // }
 
-        let regexMatch = this._regex.exec(part);
+        let regexMatch = this._isAny ? [] :this._regex.exec(part);
 
         if (!regexMatch) {
             return null;
@@ -52,7 +56,7 @@ export class RegexLeaf extends Leaf {
             return this;
         }
 
-        let found =  this._checkLeafs(parts, index, params);
+        let found = this._checkLeafs(parts, index, params);
 
         if (found) {
             this._addParams(params, this._paramNames, regexMatch);
@@ -60,12 +64,12 @@ export class RegexLeaf extends Leaf {
         }
 
         if (regexMatch && this._handler) {
-            return this._checkFullPath(index,parts,params)
+            return this._checkFullPath(index, parts, params)
 
         }
     }
 
-    private _checkFullPath(index:number,parts:string[],params:Params):Leaf{
+    private _checkFullPath(index: number, parts: string[], params: Params): Leaf {
         let regexMatch = this._regexFull.exec(Util.joinByIndex(index, parts));
 
         if (regexMatch) {
@@ -77,10 +81,12 @@ export class RegexLeaf extends Leaf {
     }
 
     private _addParams(params: Params, keys: string[], values: string[]) {
-
+        if(!values.length){
+            return;
+        }
         let decode = this._options.decodeUrlParams;
         for (let i = 0, len = keys.length; i < len; i++) {
-            params[keys[i]] = decode ? decodeURIComponent(values[i+1]) :values[i+1]
+            params[keys[i]] = decode ? decodeURIComponent(values[i + 1]) : values[i + 1]
         }
     }
 
