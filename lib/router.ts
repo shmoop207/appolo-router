@@ -4,8 +4,6 @@ import {Tree} from "./tree";
 import {Util} from "./util";
 import {Params} from "./leaf";
 import {Cache} from "appolo-cache";
-import _= require( "lodash");
-
 
 export class Router {
 
@@ -14,12 +12,12 @@ export class Router {
 
     private _staticRoutes: { [index: string]: { [index: string]: any } } = {};
     private _cachedRoutes: { [index: string]: Cache<string, { params: Params, handler: any }> } = {};
-    private _options: IOptions;
-    private _useCache: boolean;
+    private readonly _options: IOptions;
+    private readonly _useCache: boolean;
 
     public constructor(options?: IOptions) {
 
-        this._options = _.extend({
+        this._options = Object.assign({
             useCache: true,
             decodeUrlParams: false,
             maxCacheSize: 1000
@@ -80,9 +78,9 @@ export class Router {
 
         let parts = path.split("/");
 
-        let methods = _.isArray(method) ? method : [method];
+        let methods = Array.isArray(method) ? method : [method];
 
-        _.forEach(methods, method => {
+        methods.forEach( method => {
             let tree = this._forest[method];
 
             let leaf = tree.add(parts);
@@ -102,11 +100,11 @@ export class Router {
         path = Util.removeTailSlash(path);
         path = Util.removeHeadSlash(path);
 
-        let methods = _.isArray(method) ? method : [method];
+        let methods = Array.isArray(method) ? method : [method];
 
         let parts = path.split("/");
 
-        _.forEach(methods, method => {
+        methods.forEach(method => {
 
             let tree = this._forest[method];
 

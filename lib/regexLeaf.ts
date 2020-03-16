@@ -19,11 +19,11 @@ export class RegexLeaf extends Leaf {
 
         let keys = [], keyFull = [];
 
-        this._regex = pathToRegexp(Util.convertWildCard(this._part), keys);
+        this._regex = pathToRegexp.pathToRegexp(Util.convertWildCard(this._part), keys);
 
         let fullPath = Util.joinByIndexWithWildCard(index, parts);
 
-        this._regexFull = pathToRegexp(fullPath, keyFull);
+        this._regexFull = pathToRegexp.pathToRegexp(fullPath, keyFull);
 
         this._paramNames = keys.map(item => item.name);
         this._paramNamesFull = keyFull.map(item => item.name);

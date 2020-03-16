@@ -1,4 +1,3 @@
-import _ = require("lodash");
 
 export class Util {
 
@@ -6,11 +5,11 @@ export class Util {
 
     public static isRegex(path: string): boolean {
 
-        return _.some(this.RegexChars, char => path.includes(char)) || path.indexOf(":") != path.lastIndexOf(":");
+        return this.RegexChars.some( char => path.includes(char)) || path.indexOf(":") != path.lastIndexOf(":");
     }
 
     public static isStaticRoute(path): boolean {
-        return !Util.isRegex(path) && !_.some([":"], char => path.includes(char));
+        return !Util.isRegex(path) && ![":"].some( char => path.includes(char));
     }
 
     public static isParam(path: string): boolean {

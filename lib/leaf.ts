@@ -1,8 +1,8 @@
 import {LeafType} from "./enums";
 import {Util} from "./util";
-import _= require( "lodash");
 import {LeafFactory} from "./leafFactory";
 import {IOptions} from "./IOptions";
+import {Arrays} from "appolo-utils";
 
 export interface Params {
     [index: string]: string
@@ -58,7 +58,7 @@ export abstract class Leaf {
         if (!leaf) {
             leaf = require("./leafFactory").LeafFactory.createLeaf(part, parts, index, this._options);
             this._leafs.push(leaf);
-            this._leafs = _.orderBy(this._leafs, (item: Leaf) => item.Type);
+            this._leafs = Arrays.sortBy(this._leafs, (item: Leaf) => item.Type);
             this._numLeafs = this._leafs.length;
         }
 
