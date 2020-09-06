@@ -58,7 +58,7 @@ export abstract class Leaf {
         if (!leaf) {
             leaf = require("./leafFactory").LeafFactory.createLeaf(part, parts, index, this._options);
             this._leafs.push(leaf);
-            this._leafs = Arrays.sortBy(this._leafs, (item: Leaf) => item.Type);
+            this._leafs = Util.sortBy(this._leafs, (item: Leaf) => item.Type);
             this._numLeafs = this._leafs.length;
         }
 

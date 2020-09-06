@@ -65,4 +65,15 @@ export class Util {
 
         return part
     }
+
+    public static sortBy<T>(arr: T[], criteria: (value: T) => any): T[] {
+        arr = arr.slice(0);
+
+        arr.sort((a, b) => {
+            let valueA = criteria(a), valueB = criteria(b);
+            return (valueA > valueB) ? 1 : ((valueB > valueA) ? -1 : 0);
+        });
+
+        return arr;
+    }
 }

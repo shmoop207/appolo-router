@@ -38,11 +38,13 @@ describe("Router", () => {
         should.not.exist(output);
     });
     it("Should find param route ", () => {
-        let router = new index_1.Router();
+        let router = new index_1.Router({ maxCacheSize: 1 });
         router.get("/:test/", { working1: true });
         router.get("/test/test2/:test3/", { working2: true });
         router.get("/test/:test2/", { working3: true });
         router.get("/test/:test2/:test3/test4/", { working4: true });
+        router.find("GET", "/test/");
+        router.find("GET", "/test/");
         let output = router.find("GET", "/test/");
         output.handler.working1.should.be.ok;
         output.params.test.should.be.eq("test");

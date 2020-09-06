@@ -5,4 +5,5 @@ test
 Gruntfile.js
 .idea
 .DS_Store
-benchmark
+.nyc_output
+benchmarks

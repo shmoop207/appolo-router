@@ -11,7 +11,7 @@ export class Router {
     private _forest: { [index: string]: Tree } = {};
 
     private _staticRoutes: { [index: string]: { [index: string]: any } } = {};
-    private _cachedRoutes: { [index: string]: Cache<string, { params: Params, handler: any }> } = {};
+    private _cachedRoutes: { [index: string]: Map<string, { params: Params, handler: any }> } = {};
     private readonly _options: IOptions;
     private readonly _useCache: boolean;
 
@@ -20,7 +20,7 @@ export class Router {
         this._options = Object.assign({
             useCache: true,
             decodeUrlParams: false,
-            maxCacheSize: 1000
+            maxCacheSize: 10000
         }, options || {});
 
         this._useCache = this._options.useCache;
@@ -36,7 +36,7 @@ export class Router {
             .forEach(method => this._staticRoutes[method] = {});
 
         Object.keys(Methods)
-            .forEach(method => this._cachedRoutes[method] = new Cache<string, { params: Params, handler: any }>({maxSize: this._options.maxCacheSize}));
+            .forEach(method => this._cachedRoutes[method] = new Map<string, { params: Params, handler: any }>());
 
     }
 
@@ -80,7 +80,7 @@ export class Router {
 
         let methods = Array.isArray(method) ? method : [method];
 
-        methods.forEach( method => {
+        methods.forEach(method => {
             let tree = this._forest[method];
 
             let leaf = tree.add(parts);
@@ -108,15 +108,15 @@ export class Router {
 
             let tree = this._forest[method];
 
-            tree.remove(parts,0);
+            tree.remove(parts, 0);
 
             if (Util.isStaticRoute(path)) {
                 delete this._staticRoutes[method][`/${path}`];
                 delete this._staticRoutes[method][`/${path}/`];
             }
 
-            this._cachedRoutes[method].del(`/${path}`);
-            this._cachedRoutes[method].del(`/${path}/`);
+            this._cachedRoutes[method].delete(`/${path}`);
+            this._cachedRoutes[method].delete(`/${path}/`);
         });
     }
 
@@ -128,8 +128,10 @@ export class Router {
             return {handler: staticRote, params: {}}
         }
 
+        let map = this._cachedRoutes[method];
+
         if (this._useCache) {
-            let cached = this._cachedRoutes[method].get(path);
+            let cached = map.get(path);
 
             if (cached) {
                 return {handler: cached.handler, params: cached.params}
@@ -155,7 +157,11 @@ export class Router {
 
         let dto = {params, handler: found.handler};
 
-        this._cachedRoutes[method].set(path, dto);
+        map.set(path, dto);
+
+        if(map.size > this._options.maxCacheSize){
+            map.delete(map.keys().next().value)
+        }
 
         return dto;
     }

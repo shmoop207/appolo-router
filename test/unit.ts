@@ -18,7 +18,7 @@ describe("Router", () => {
         router = new Router();
         router.get("/:test", {working1: true});
 
-        output = router.find("GET" , "/");
+        output = router.find("GET", "/");
         should.not.exist(output)
 
         router = new Router();
@@ -62,7 +62,7 @@ describe("Router", () => {
 
 
     it("Should find param route ", () => {
-        let router = new Router();
+        let router = new Router({maxCacheSize: 1});
 
         router.get("/:test/", {working1: true});
         router.get("/test/test2/:test3/", {working2: true});
@@ -70,6 +70,8 @@ describe("Router", () => {
         router.get("/test/:test2/:test3/test4/", {working4: true});
 
 
+        router.find("GET" as Methods, "/test/");
+        router.find("GET" as Methods, "/test/");
         let output = router.find("GET" as Methods, "/test/");
         output.handler.working1.should.be.ok;
         output.params.test.should.be.eq("test");
