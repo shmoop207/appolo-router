@@ -2,7 +2,6 @@ import {LeafType} from "./enums";
 import {Util} from "./util";
 import {LeafFactory} from "./leafFactory";
 import {IOptions} from "./IOptions";
-import {Arrays} from "appolo-utils";
 
 export interface Params {
     [index: string]: string

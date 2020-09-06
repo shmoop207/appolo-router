@@ -3,7 +3,6 @@ import {Methods} from "./enums";
 import {Tree} from "./tree";
 import {Util} from "./util";
 import {Params} from "./leaf";
-import {Cache} from "appolo-cache";
 
 export class Router {
 
