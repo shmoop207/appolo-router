@@ -1,19 +1,19 @@
 # Appolo Route
-[![Build Status](https://travis-ci.org/shmoop207/appolo-route.svg?branch=master)](https://travis-ci.org/shmoop207/appolo-route) [![Dependencies status](https://david-dm.org/shmoop207/appolo-route.svg)](https://david-dm.org/shmoop207/appolo-route) [![NPM version](https://badge.fury.io/js/appolo-route.svg)](https://badge.fury.io/js/appolo-route)  [![npm Downloads](https://img.shields.io/npm/dm/appolo-route.svg?style=flat)](https://www.npmjs.com/package/appolo-route)
-[![Known Vulnerabilities](https://snyk.io/test/github/shmoop207/appolo-route/badge.svg)](https://snyk.io/test/github/shmoop207/appolo-route)
+[![Build Status](https://travis-ci.com/shmoop207/appolo-router.svg?branch=master)](https://travis-ci.org/shmoop207/appolo-router) [![Dependencies status](https://david-dm.org/shmoop207/appolo-router.svg)](https://david-dm.org/shmoop207/appolo-router) [![NPM version](https://badge.fury.io/js/appolo-router.svg)](https://badge.fury.io/js/appolo-route)  [![npm Downloads](https://img.shields.io/npm/dm/appolo-router.svg?style=flat)](https://www.npmjs.com/package/appolo-router)
+[![Known Vulnerabilities](https://snyk.io/test/github/shmoop207/appolo-router/badge.svg)](https://snyk.io/test/github/shmoop207/appolo-router)
 
 Fast and simple http routing using radix tree
 
 ## Installation:
 
 ```javascript
-npm install appolo-route --save
+npm install @appolo/route --save
 ```
 
 ## Usage:
 
 ```javascript
-import {Router} from "appolo-route"
+import {Router} from "@appolo/route"
 
 let router = new Router()
     .get("/test/:param", ()=>"working");
@@ -66,7 +66,7 @@ find route by path return object with `params` and `handler`
 if no `params` found return empty object
 
 ```javascript
-import {Router} from "appolo-route"
+import {Router} from "@appolo/route"
 
 let router = new Router()
     .get("/users/:userId", (userId)=>console.log(userId));
